@@ -1,0 +1,16 @@
+#!/usr/bin/env perl6
+
+multi sub MAIN ('p1') {
+  "input".IO.lines.comb(/<[-+]>\d+/).sum.say;
+}
+
+multi sub MAIN ('p2') {
+  # infinitely long list of deltas
+  for "input".IO.lines.comb(/<[-+]>\d+/).Slip xx * -> $d {
+    # we start at 0 so technically we've seen it.
+    state ($f, %s) = 0, { 0 =>  1 };
+    $f += $d;
+    if ++%s{$f} eq 2 { say $f; last; }
+  }
+}
+

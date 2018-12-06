@@ -1,0 +1,26 @@
+#!/usr/bin/env perl6
+
+multi sub MAIN ('p1') {
+  my (%two, %three);
+  for "input".IO.lines -> $s {
+    my $b = bag $s.comb;
+    for $b.pairs -> $p {
+      %two{$s}++ if $p.value eq 2;
+      %three{$s}++ if $p.value eq 3;
+    }
+  }
+  say %two.elems * %three.elems;
+}
+
+multi sub MAIN ('p2') {
+  my (%two, %three);
+  my @i = "input".IO.lines.map: *.comb.cache;
+  for 0..^@i.elems -> $i {
+    for $i+1 ..^ @i.elems -> $j {
+      if (@i[$i][] Zeq @i[$j][]).grep(* == False).elems == 1 {
+        say "found @i[$i].join() @i[$j].join()";
+        say (@i[$i] (&) @i[$j]).keys.sort.join;
+      }
+    }
+  }
+}
