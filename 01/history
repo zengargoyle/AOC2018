@@ -7,7 +7,9 @@
  2674  perl6 -e '<+1, -2, +3, +1>.comb(rx/<[-+]>\d+/).sum.say'
  2675  perl6 -e '<+1, -2, +3, +1>.comb(/<[-+]>\d+/).sum.say'
 
-perl6 -e 'say sum <+1, -2, +3, +1>.comb: /<[-+]>\d+/'perl6 -e 'say sum "input".IO.lines.comb: /<[-+]>\d+/'
+perl6 -e 'say sum <+1, -2, +3, +1>.comb: /<[-+]>\d+/'
+
+perl6 -e 'say sum "input".IO.lines.comb: /<[-+]>\d+/'
 580
 
 perl6 -e 'my @a = "input".IO.lines.comb(/<[-+]>\d+/).Slip xx *; for @a[] -> $d { state ($f, %s) = 0, { 0 =>  1 }; $f+=$d; if ++%s<<$f>> eq 2 { say $f; last; }};'
