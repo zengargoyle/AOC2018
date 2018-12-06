@@ -1,13 +1,15 @@
-perl6 -e 'my @i = <abcdef bababc abbcde abcccd aabcdd
-abcdee ababab>; my (%two,%three); for @i -> $s { my $b = bag $s.comb; for $b.pairs -> $p { %two{$s}++ if $p.value eq 2; %three{$s}++ if $p.value eq 3; } }; say %two.elems * %three.elems'
+perl6 -e 'my @i = <abcdef bababc abbcde abcccd aabcdd abcdee ababab>; my (%two,%three); for @i -> $s { my $b = bag $s.comb; for $b.pairs -> $p { %two{$s}++ if $p.value eq 2; %three{$s}++ if $p.value eq 3; } }; say %two.elems * %three.elems'
 12
+
 perl6 -e 'my @i = "input".IO.lines; my (%two,%three); for @i -> $s { my $b = bag $s.comb; for $b.pairs -> $p { %two{$s}++ if $p.value eq 2; %three{$s}++ if $p.value eq 3; } }; say %two.elems * %three.elems'
 7470
+
 perl6 -e 'my @i = "input".IO.lines.map(*.comb.cache); for 0..^@i.elems -> $i { for $i+1 ..^ @i.elems -> $j { { say "found @i[$i].join() @i[$j].join()"; say (@i[$i] (&) @i[$j]).keys.sort.join; say @i[$i]; say @i[$j] } if (@i[$i][] Zeq @i[$j][]).grep(* == False).elems == 1; }}' 
 found kqzxdenujwcstybmgvyiofrwrd kqzxdenujwcstybmgvyiofrard
 bcdefgijkmnoqrstuvwxyz
 (k q z x d e n u j w c s t y b m g v y i o f r w r d)
 (k q z x d e n u j w c s t y b m g v y i o f r a r d)
+
 perl6 -e 'my @i = <abcde fghij klmno pqrst fguij axcye wvxyz>.map(*.comb.cache); for 0..^@i.elems -> $i { for $i+1 ..^ @i.elems -> $j { { say "found @i[$i].join() @i[$j].join()"; say (@i[$i] (&) @i[$j]).keys.sort.join; say @i[$i]; say @i[$j] } if (@i[$i][] Zeq @i[$j][]).grep(* == False).elems == 1; }}' 
 found fghij fguij
 fgij
