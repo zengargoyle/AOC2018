@@ -1,0 +1,35 @@
+#!/usr/bin/env perl6
+
+multi sub MAIN ('p1') {
+  my %guard;
+  for "input".IO.lines.sort {
+    state ($g,$fa);
+    my ($yyyy,$mm,$dd,$,$m,$G) = .comb(/\d+/)>>.Int;
+    when /Guard/ {
+      %guard{$G} //= [ 0 xx 60 ];
+      $g = $G;
+    }
+    when /falls/ {
+      $fa = $m;
+    }
+    when /wakes/ {
+      %guard{$g}[$_]++ for $fa..^$m;
+    }
+
+  }
+  # dd %guard;
+
+  my $sleepy = %guard.pairs.sort({ .value.values.sum }).tail;
+  my $minute = $sleepy.value.pairs.sort({ .value }).tail;
+
+  say "$sleepy.key() $minute.key()";
+  say "{$sleepy.key() * $minute.key()}";
+
+  my $usual = %guard.pairs.sort({ .value.values.max }).tail;
+  my $uminute = $usual.value.pairs.sort({ .value }).tail;
+  say "$usual.key() $uminute.key()";
+  say "{$usual.key() * $uminute.key()}";
+}
+
+multi sub MAIN ('p2') {
+}

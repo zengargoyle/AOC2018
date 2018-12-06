@@ -1,0 +1,10 @@
+ 2654  perl6 -e 'say <+1 -2 +4>.words'
+ 2655  perl6 -e 'say [+] <+1 -2 +4>.words'
+ 2657  perl6 -e 'say <+1 -2 +4>.words.sum'
+ 2659  perl6 -e '<+1 -2 +4>.words.sum.say'
+ 2660  perl6 -e 'say [+] words <+1 -2 +4>'
+ 2661  perl6 -e 'say sum words <+1 -2 +4>'
+ 2674  perl6 -e '<+1, -2, +3, +1>.comb(rx/<[-+]>\d+/).sum.say'
+ 2675  perl6 -e '<+1, -2, +3, +1>.comb(/<[-+]>\d+/).sum.say'
+perl6 -e 'say sum <+1, -2, +3, +1>.comb: /<[-+]>\d+/'perl6 -e 'say sum "input".IO.lines.comb: /<[-+]>\d+/'
+580perl6 -e 'my @a = "input".IO.lines.comb(/<[-+]>\d+/).Slip xx *; for @a[] -> $d { state ($f, %s) = 0, { 0 =>  1 }; $f+=$d; if ++%s<<$f>> eq 2 { say $f; last; }};'81972

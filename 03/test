@@ -1,0 +1,43 @@
+#!/usr/bin/env perl6
+
+multi sub MAIN ('p1') {
+my %claim;
+for "input".IO.lines {
+	# my %r;
+	# %r<i t l h w> = .comb(/\d+/);
+	# say %r;
+	my ($i,$l,$t,$w,$h) = .comb(/\d+/)>>.Int;
+	# dd [ $l, $t, $w, $h ];
+	my @s = $l..^$l+$w X=>  $t..^$t+$h;
+	# dd @s;
+	%claim{$_}++ for @s;
+}
+say %claim.pairs.grep(*.value > 1).elems;
+}
+
+multi sub MAIN ('p2') {
+my %id;
+my %claim;
+for "input".IO.lines {
+	# my %r;
+	# %r<i t l h w> = .comb(/\d+/);
+	# say %r;
+	my ($i,$l,$t,$w,$h) = .comb(/\d+/)>>.Int;
+	# dd [ $l, $t, $w, $h ];
+	my @s = $l..^$l+$w X=>  $t..^$t+$h;
+	# dd @s;
+	%claim{$_}.push($i) for @s;
+	%id{$i} = @s;
+}
+	my %ok = %claim.pairs.grep(*.value.elems == 1);
+
+	for %id.kv -> $k, $v {
+		if $v.values.grep({ %ok{$_}:exists}).elems == $v.elems {
+			say $k;
+		}
+		# for $v.values -> $p {
+			# say "$p.key() $p.value()";
+		# }
+	}
+
+}

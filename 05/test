@@ -1,0 +1,78 @@
+#!/usr/bin/env perl6
+
+multi sub MAIN ('p1') {
+  say "05";
+  for "input".IO.lines -> $_ is copy {
+    my $orig = $_;
+    loop {
+      s:g/(<[a..z]>)<{$/[0].uc}>//;
+      s:g/(<[A..Z]>)<{$/[0].lc}>//;
+      last if $_ eq $orig;
+      $orig = $_;
+    }
+    $orig.chars.say;
+  }
+}
+
+multi sub MAIN ('p1', 'a') {
+  say "05";
+
+  my @lower = 'a' .. 'z';
+  my @upper = 'A' .. 'Z';
+  my @ul = @upper Z~ @lower;
+  my @lu = @lower Z~ @upper;
+  my @x = |@lu, |@ul;
+
+  @lu.say;
+  @ul.say;
+  @x.say;
+
+  for "input".IO.lines -> $_ is copy {
+    my $orig = $_;
+    # .say;
+    loop {
+      $_ .= trans( @x => ['' xx @x.elems] , :delete );
+      last if $_ eq $orig;
+      $orig = $_;
+      # .say;
+    }
+    $orig.chars.say;
+  }
+}
+
+multi sub MAIN ('p2') {
+  say "05";
+
+  my @lower = 'a' .. 'z';
+  my @upper = 'A' .. 'Z';
+  my @ul = @upper Z~ @lower;
+  my @lu = @lower Z~ @upper;
+  my @x = |@lu, |@ul;
+
+  @lu.say;
+  @ul.say;
+  @x.say;
+
+  sub reduce($p) {
+    my $orig = $p;
+    loop {
+      my $new = $orig;
+      $new .= trans( @x => ['' xx @x.elems] , :delete );
+      last if $new eq $orig;
+      $orig = $new;
+    }
+    $orig.chars;
+  }
+
+  my %size;
+  for "input".IO.lines -> $l {
+    for 'a'..'z' -> $c {
+      my $C = $c.uc;
+      my $try = $l.trans( [ "$c", "$C" ] => [ '' xx 2 ], :delete );
+      %size{$c} = reduce($try);
+    }
+
+  say %size.pairs.sort({ .value }).first;
+    
+  }
+}
