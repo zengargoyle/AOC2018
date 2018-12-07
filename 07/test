@@ -1,0 +1,81 @@
+#!/usr/bin/env perl6
+
+multi sub MAIN ('p1') {
+
+  my %T;
+
+  for "input".IO.lines {
+    # WTF?
+    my ($prereq,$task) = do given (m:g/<[A..Z]>/) { .[1].Str, .[2].Str };
+    %T{$prereq} //= []; # prereq must exist even if it has no prereqs itself
+    %T{$task} //= [];
+    %T{$task}.push: $prereq;
+  }
+
+  my @order;
+  while %T.elems {
+    my $next = %T.pairs.grep(*.value.elems == 0).sort.first.key;
+    my @deps = %T.pairs.grep(*.value.contains($next))>>.key;
+    for @deps -> $d {
+      %T{$d} = %T{$d}.grep(* !eq $next);
+    }
+    %T{$next}:delete;
+    @order.push: $next;
+  }
+
+  say @order.join;
+
+}
+
+multi sub MAIN ('p2') {
+
+  my $delay = 60;
+  my $worker-count = 5;
+
+  sub ord-time($c) { $c.ord - 'A'.ord + 1 + $delay }
+
+  my @workers = (0) xx $worker-count;
+
+  my %T;
+  my %ticker;
+ 
+    
+  for "input".IO.lines {
+    # WTF?
+    my ($prereq,$task) = do given (m:g/<[A..Z]>/) { .[1].Str, .[2].Str };
+    %T{$prereq} //= []; # prereq must exist even if it has no prereqs itself
+    %T{$task} //= [];
+    %T{$task}.push: $prereq;
+  }
+
+  sub unblock($t) {
+    my @deps = %T.pairs.grep(*.value.contains($t))>>.key;
+    for @deps -> $d {
+      %T{$d} = %T{$d}.grep(* !eq $t);
+    }
+  }
+
+  my @output;
+  my $tick = 0;
+  while %T.elems {
+    dd %ticker;
+    if %ticker{$tick}:exists { { unblock($_); @output.push($_) } for %ticker{$tick}:delete }
+
+    my @jobs = %T.pairs.grep(*.value.elems == 0).sort>>.key;
+    my @work = @workers.pairs.grep(*.value <= $tick)>>.key;
+    my $avail = min @jobs.elems, @work.elems;
+
+    for 0..^$avail {
+      my $w = shift @work;
+      my $j = shift @jobs;
+      @workers[$w] = $tick + ord-time($j);
+      %ticker{$tick + ord-time($j)} = $j;
+      %T{$j}:delete;
+      say "$w $j {$tick + ord-time($j)}";
+    }
+
+    $tick++;
+  }
+  say "$tick ", @output.join;
+  say %ticker;
+}
