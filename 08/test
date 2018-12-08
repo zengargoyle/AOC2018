@@ -1,0 +1,59 @@
+#!/usr/bin/env perl6
+
+  # 138
+  
+multi sub MAIN ('p1') {
+  
+  my @stream = "input".IO.lines.comb(/\d+/)>>.Int;
+
+  sub create-node {
+    my ($c,$m) = @stream.splice(0,2);
+    my @c;
+    for ^$c {
+      @c.push: &?ROUTINE();
+    }
+    my @m = @stream.splice(0,$m);
+    { :@c, :@m }
+  }
+
+  my $tree = create-node();
+
+  sub meta-add ($n) {
+    my $s = 0;
+    for $n<c>.list -> $x {
+      $s += &?ROUTINE($x);
+    }
+    $s += sum $n<m>;
+    return $s;
+  }
+
+  say meta-add($tree);
+}
+
+multi sub MAIN ('p2') {
+  #66
+  my @stream = "input".IO.lines.comb(/\d+/)>>.Int;
+
+  sub create-node {
+    my ($c,$m) = @stream.splice(0,2);
+    my @c;
+    for ^$c {
+      @c.push: &?ROUTINE();
+    }
+    my @m = @stream.splice(0,$m);
+
+    my $v = do
+      if @c {
+        my @i = @m.grep(* ~~ 1..@c.elems).map(*-1);
+        sum @c[@i]>><v>;
+      }
+      else {
+        sum @m;
+      }
+
+    { :@c, :@m, :$v }
+  }
+
+  my $tree = create-node();
+  say $tree<v>;
+}
