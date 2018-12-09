@@ -16,13 +16,13 @@ sub pretty {
 }
 
 loop {
-  my $player = @player.shift;
-  my $b = @balls.shift;
+  my int $player = @player.shift;
+  my int $b = @balls.shift;
 
   last if $b >= $last-ball;
   
   if $b %% 23 {
-    my @tail = @circle.splice(*-7, *);
+    my int @tail = @circle.splice(*-7, *);
     @scores[$player] += $b + @tail.shift;
     @circle.prepend(@tail);
     # pretty();
