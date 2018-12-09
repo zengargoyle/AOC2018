@@ -18,6 +18,8 @@ sub pretty {
 loop {
   my $player = @player.shift;
   my $b = @balls.shift;
+
+  last if $b >= $last-ball;
   
   if $b %% 23 {
     my @tail = @circle.splice(*-7, *);
@@ -37,7 +39,6 @@ loop {
 
   # pretty();
 
-  last if $b == $last-ball;
 }
 
 .say for @scores.pairs.grep(*.value).sort(-*.value).first;
