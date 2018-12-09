@@ -1,0 +1,41 @@
+#!/usr/bin/env perl6
+
+my $player-count = 465;
+my $last-ball = 7194000;
+
+my @balls = 1 .. Inf;
+my @player = (0 .. Inf).map: (* % $player-count) + 1;
+
+my @scores;
+my @circle = 0;
+my $player;
+
+sub pretty {
+  my $i = @circle.pairs.first(*.value == 0).key;
+  say "[$player] @circle[$i..*] (@circle[0]) @circle[1..^$i]";
+}
+
+loop {
+  my $player = @player.shift;
+  my $b = @balls.shift;
+  
+  if $b %% 23 {
+    my @tail = @circle.splice(*-7, *);
+    @scores[$player] += $b + @tail.shift;
+    @circle.prepend(@tail);
+    # pretty();
+    next;
+  }
+
+  # huh, naive push/shift 0m0.940s , splice/append  0m1.220s
+  given @circle { .push(.shift); .push(.shift); }
+  # @circle.append( @circle.splice(0,2) );
+
+  @circle.unshift: $b;
+
+  # pretty();
+
+  last if $b == $last-ball;
+}
+
+.say for @scores.pairs.grep(*.value).sort(-*.value).first;
