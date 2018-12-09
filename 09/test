@@ -30,6 +30,8 @@ loop {
   # huh, naive push/shift 0m0.940s , splice/append  0m1.220s
   given @circle { .push(.shift); .push(.shift); }
   # @circle.append( @circle.splice(0,2) );
+  # rotate must copy... takes too long to even test.
+  # @circle.=rotate(2);
 
   @circle.unshift: $b;
 
